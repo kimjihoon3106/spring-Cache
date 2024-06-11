@@ -59,4 +59,13 @@ public class MemberRepository {
         store.put(member.getId(), member);
         return member;
     }
+
+    @Caching(evict = {
+            @CacheEvict(key = "'all'"),
+            @CacheEvict(key = "#member.id")
+    })
+    public void delete(Member member) {
+        log.info("Repository delete {}", member);
+        store.remove(member.getId());
+    }
 }
