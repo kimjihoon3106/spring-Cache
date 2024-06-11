@@ -51,4 +51,12 @@ public class MemberRepository {
         int lastIndex = store.size() - 1;
         return (Long) store.keySet().toArray()[lastIndex] + 1;
     }
+
+    @CachePut(key = "#member.id")
+    @CacheEvict(key = "'all'")
+    public Member update(Member member) {
+        log.info("Repository update {}", member);
+        store.put(member.getId(), member);
+        return member;
+    }
 }
