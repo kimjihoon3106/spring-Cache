@@ -23,4 +23,11 @@ public class MemberRepository {
         log.info("Repository findAll ()", members);
         return new Members(members);
     }
+
+    @Cacheable(key = "#memberId", unless = "#result == pull")
+    public Member findById(Long memberId) {
+        Member member = store.get(memberId);
+        log.info("Repository find {}", member);
+        return member;
+    }
 }
