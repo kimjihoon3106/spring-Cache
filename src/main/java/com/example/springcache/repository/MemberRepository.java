@@ -30,4 +30,25 @@ public class MemberRepository {
         log.info("Repository find {}", member);
         return member;
     }
+
+    @CachePut(key = "#member.id")
+    @CacheEvict(key = "'all'")
+    public Member save(Member member) {
+        Long newId = calculateId();
+        member.setId(newId);
+
+        log.info("Repository save {}",member);
+
+        store.put(member.getId(), member);
+        return member;
+    }
+
+    private Long calculateId() {
+        if(store.isEmpty()) {
+            return 1L;
+        }
+
+        int lastIndex = store.size() - 1;
+        return (Long) store.keySet().toArray()[lastIndex] + 1;
+    }
 }
